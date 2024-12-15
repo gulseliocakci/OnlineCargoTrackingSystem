@@ -2,28 +2,36 @@ package org.example;
 import java.util.Date;
 public class Main {
     public static void main(String[] args) {
-        // CustomerManager nesnesi oluşturuluyor
+        // CustomerManager oluşturuluyor
         CustomerManager manager = new CustomerManager();
 
-        // Müşterileri ekliyoruz
-        manager.addCustomer(1, "Ali", "Yılmaz");
-        manager.addCustomer(2, "Veli", "Demir");
-        manager.addCustomer(3, "Ayşe", "Kara");
+        // Müşteriler ekleniyor
+        manager.addCustomer(1, "John", "Doe");
+        manager.addCustomer(2, "Jane", "Smith");
 
-        // Kargoları belirli müşterilere ekliyoruz
-        manager.addCargoToCustomer(1, 101, new Date(1234567890000L), true, 5); // Ali'ye kargo
-        manager.addCargoToCustomer(1, 102, new Date(1234567880000L), false, 7); // Ali'ye kargo
-        manager.addCargoToCustomer(2, 103, new Date(1234567900000L), true, 3); // Veli'ye kargo
-        manager.addCargoToCustomer(2, 104, new Date(1234567860000L), false, 2); // Veli'ye kargo
+        // Kargolar ekleniyor
+        manager.addCargoToCustomer(1, 101, new Date(2024 - 1900, 11, 15), false, 3);  // Kargo 3 gün sürecek
+        manager.addCargoToCustomer(1, 102, new Date(2024 - 1900, 11, 16), false, 1);  // Kargo 1 gün sürecek
+        manager.addCargoToCustomer(2, 103, new Date(2024 - 1900, 11, 14), true, 2);   // Kargo 2 gün sürecek
+        manager.addCargoToCustomer(2, 104, new Date(2024 - 1900, 11, 17), false, 4);  // Kargo 4 gün sürecek
 
-        // Tüm müşterileri ve kargo geçmişlerini listeleme
-        manager.listCustomers();
-
-        // Müşteri ID'sine göre kargo geçmişini sorgulama
-        System.out.println("\nSorgulama: Müşteri 1'in Kargo Geçmişi");
+        // Kargo geçmişi sorgulama
+        System.out.println("Listing cargo history for Customer ID 1:");
         manager.listCargoHistoryForCustomer(1);
 
-        System.out.println("\nSorgulama: Müşteri 2'nin Kargo Geçmişi");
+        System.out.println("\nListing cargo history for Customer ID 2:");
         manager.listCargoHistoryForCustomer(2);
+
+        // PriorityQueue'daki tüm kargoları listeleme
+        System.out.println("\nPriority Queue (Sorted by Delivery Time):");
+        manager.listPriorityQueue();
+
+        // Kargo işleme
+        System.out.println("\nProcessing the next cargo from priority queue:");
+        manager.processNextCargo();
+
+        // Kargo işleme tekrar yapılıyor
+        System.out.println("\nProcessing the next cargo from priority queue:");
+        manager.processNextCargo();
     }
 }

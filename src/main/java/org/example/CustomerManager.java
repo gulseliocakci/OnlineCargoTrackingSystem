@@ -31,9 +31,22 @@ public class CustomerManager {
     }
 
     // Kargo ekleme ve Priority Queue'ya ekleme
-    public void addCargoToPriorityQueue(int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
-        Cargo cargo = new Cargo(cargoId, cargoDate, isDelivered, deliveryTime);
-        cargoPriorityQueue.add(cargo);
+    public void addCargoToCustomer(int customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
+        // Müşteri bulma
+        Customer customer = findCustomerById(customerId);
+
+        if (customer != null) {
+            // Kargo nesnesini oluşturma
+            Cargo cargo = new Cargo(cargoId, cargoDate, isDelivered, deliveryTime);
+
+            // Müşteriye kargo ekleme
+            customer.addCargo(cargo);
+
+            // Kargoyu sadece Priority Queue'ya ekleme (Teslimat süresine göre sıralı eklenir)
+            cargoPriorityQueue.add(cargo);
+        } else {
+            System.out.println("Customer with ID " + customerId + " not found.");
+        }
     }
 
     // Kargo işleme
