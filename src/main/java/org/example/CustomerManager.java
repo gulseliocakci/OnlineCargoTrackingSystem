@@ -1,14 +1,17 @@
 package org.example;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Date;
 
 public class CustomerManager {
     private List<Customer> customers; // Tüm müşterilerin listesi
+    private PriorityQueue<Cargo> cargoPriorityQueue; // Kargoların teslimat önceliği ile sıralandığı kuyruk
 
     // Constructor
     public CustomerManager() {
         this.customers = new ArrayList<>();
+        this.cargoPriorityQueue = new PriorityQueue<>(); // Teslimat süresine göre sıralanmış kargo kuyruğu
     }
 
     // Müşteri ekleme
@@ -27,14 +30,20 @@ public class CustomerManager {
         return null; // Müşteri bulunamazsa null döner
     }
 
-    // Kargo ekleme
-    public void addCargoToCustomer(int customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
-        Customer customer = findCustomerById(customerId);
-        if (customer != null) {
-            Cargo cargo = new Cargo(cargoId, cargoDate, isDelivered, deliveryTime);
-            customer.addCargo(cargo);
+    // Kargo ekleme ve Priority Queue'ya ekleme
+    public void addCargoToPriorityQueue(int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
+        Cargo cargo = new Cargo(cargoId, cargoDate, isDelivered, deliveryTime);
+        cargoPriorityQueue.add(cargo);
+    }
+
+    // Kargo işleme
+    public void processNextCargo() {
+        if (!cargoPriorityQueue.isEmpty()) {
+            Cargo cargo = cargoPriorityQueue.poll(); // En öncelikli kargo (en kısa teslimat süresi) alınır
+            System.out.println("Processing Cargo: " + cargo);
+            // Kargo işleme işlemleri (teslimat durumu güncellenebilir)
         } else {
-            System.out.println("Customer with ID " + customerId + " not found.");
+            System.out.println("No cargo to process.");
         }
     }
 
@@ -58,6 +67,14 @@ public class CustomerManager {
             for (Cargo cargo : customer.getCargos()) {
                 System.out.println(cargo);
             }
+        }
+    }
+
+    // PriorityQueue'daki tüm kargoları listeleme
+    public void listPriorityQueue() {
+        System.out.println("Priority Queue (Sorted by Delivery Time):");
+        for (Cargo cargo : cargoPriorityQueue) {
+            System.out.println(cargo);
         }
     }
 }

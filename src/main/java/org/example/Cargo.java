@@ -1,7 +1,7 @@
 package org.example;
 import java.util.Date;
 
-public class Cargo {
+public class Cargo implements Comparable<Cargo> {
     private int cargoId; // Kargo ID
     private Date cargoDate; // Kargo tarihi
     private boolean isDelivered; // Teslim durumu (true: teslim edildi, false: teslim edilmedi)
@@ -30,6 +30,12 @@ public class Cargo {
 
     public int getDeliveryTime() {
         return deliveryTime;
+    }
+
+    // Teslimat süresine göre karşılaştırma (daha kısa teslimat süresi olan önceliklidir)
+    @Override
+    public int compareTo(Cargo other) {
+        return Integer.compare(this.deliveryTime, other.deliveryTime);
     }
 
     @Override
