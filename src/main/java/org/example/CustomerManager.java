@@ -38,6 +38,19 @@ public class CustomerManager {
         }
     }
 
+    // Müşteri ID'sine göre kargo geçmişini sorgulama
+    public void listCargoHistoryForCustomer(int customerId) {
+        Customer customer = findCustomerById(customerId);
+        if (customer != null) {
+            System.out.println("Cargo History for Customer ID: " + customerId);
+            for (Cargo cargo : customer.getCargos()) {
+                System.out.println(cargo);
+            }
+        } else {
+            System.out.println("Customer with ID " + customerId + " not found.");
+        }
+    }
+
     // Müşterileri listeleme
     public void listCustomers() {
         for (Customer customer : customers) {
@@ -48,3 +61,4 @@ public class CustomerManager {
         }
     }
 }
+

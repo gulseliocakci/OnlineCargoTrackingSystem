@@ -18,5 +18,12 @@ public class Main {
 
         // Tüm müşterileri ve kargo geçmişlerini listeleme
         manager.listCustomers();
+
+        // Müşteri ID'sine göre kargo geçmişini sorgulama
+        System.out.println("\nSorgulama: Müşteri 1'in Kargo Geçmişi");
+        manager.listCargoHistoryForCustomer(1);
+
+        System.out.println("\nSorgulama: Müşteri 2'nin Kargo Geçmişi");
+        manager.listCargoHistoryForCustomer(2);
     }
 }
