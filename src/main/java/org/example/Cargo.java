@@ -36,3 +36,4 @@ public class Cargo {
         return "CargoID: " + cargoID + ", Send Date: " + sendDate + ", Delivered: " + isDelivered + ", Delivery Time: " + deliveryTime + " days";
     }
 }
+
