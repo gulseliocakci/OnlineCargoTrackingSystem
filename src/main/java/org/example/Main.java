@@ -2,7 +2,7 @@ package org.example;
 import java.util.Date;
 public class Main {
     public static void main(String[] args) {
-        // CustomerManager oluşturuluyor
+        /*// CustomerManager oluşturuluyor
         CustomerManager manager = new CustomerManager();
 
         // Müşteriler ekleniyor
@@ -32,6 +32,8 @@ public class Main {
 
         // Kargo işleme tekrar yapılıyor
         System.out.println("\nProcessing the next cargo from priority queue:");
-        manager.processNextCargo();
+        manager.processNextCargo();*/
+        CargoRoutingTree tree = new CargoRoutingTree();
+        tree.showCitiesAndDistricts();
     }
 }

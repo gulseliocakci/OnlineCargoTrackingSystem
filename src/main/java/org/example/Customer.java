@@ -31,16 +31,7 @@ public class Customer {
     public LinkedList<Cargo> getCargos() {
         return cargos;
     }
-
-    // Kargo ekleme metodunu sıralı şekilde yapacağız
-    public void addCargo(Cargo cargo) {
-        // LinkedList'ı tarih sırasına göre sıralayarak ekleyeceğiz
-        int index = 0;
-        while (index < cargos.size() && cargos.get(index).getCargoDate().before(cargo.getCargoDate())) {
-            index++;
-        }
-        cargos.add(index, cargo); // Sıralı şekilde ekle
-    }
+    
 
     @Override
     public String toString() {
