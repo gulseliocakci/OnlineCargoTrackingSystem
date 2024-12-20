@@ -31,7 +31,7 @@ public class CustomerManager {
     }
 
     // Kargo ekleme ve Priority Queue'ya ekleme
-    public void addCargoToCustomer(int customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
+    public void addCargoToCustomer(String customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
         // Müşteri bulma
         Customer customer = findCustomerById(customerId);
 
@@ -62,7 +62,7 @@ public class CustomerManager {
     }
 
     // Müşteri ID'sine göre kargo geçmişini sorgulama
-    public void listCargoHistoryForCustomer(int customerId) {
+    public void listCargoHistoryForCustomer(String customerId) {
         Customer customer = findCustomerById(customerId);
         if (customer != null) {
             System.out.println("Cargo History for Customer ID: " + customerId);
