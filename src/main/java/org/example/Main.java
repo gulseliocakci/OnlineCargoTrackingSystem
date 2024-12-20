@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        new Interface();
         /*/ CustomerManager oluşturuluyor
         CustomerManager manager = new CustomerManager();
 
@@ -34,7 +35,7 @@ public class Main {
 
         // Kargo işleme tekrar yapılıyor
         System.out.println("\nProcessing the next cargo from priority queue:");
-        manager.processNextCargo();*/
+        manager.processNextCargo();
 
         CargoRoutingTree routingTree = new CargoRoutingTree();
         Scanner scanner = new Scanner(System.in);
@@ -67,7 +68,7 @@ public class Main {
             routingTree.displayTree();
         }
 
-        System.out.println("Kargo işlemi tamamlandı.");
+        System.out.println("Kargo işlemi tamamlandı.");*/
 
 
     }
