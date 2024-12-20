@@ -15,15 +15,15 @@ public class CustomerManager {
     }
 
     // Müşteri ekleme
-    public void addCustomer(int customerId, String firstName, String lastName) {
+    public void addCustomer(String customerId, String firstName, String lastName) {
         Customer customer = new Customer(customerId, firstName, lastName);
         customers.add(customer);
     }
 
     // Müşteri ID'sine göre müşteri arama
-    public Customer findCustomerById(int customerId) {
+    public Customer findCustomerById(String customerId) {
         for (Customer customer : customers) {
-            if (customer.getCustomerId() == customerId) {
+            if (customer.getCustomerId().equals(customerId)) {
                 return customer;
             }
         }
