@@ -1,4 +1,5 @@
 package org.example;
+
 import java.util.LinkedList;
 
 public class Customer {
@@ -31,7 +32,11 @@ public class Customer {
     public LinkedList<Cargo> getCargos() {
         return cargos;
     }
-    
+
+    // Yeni addCargo metodu
+    public void addCargo(Cargo cargo) {
+        this.cargos.add(cargo);
+    }
 
     @Override
     public String toString() {

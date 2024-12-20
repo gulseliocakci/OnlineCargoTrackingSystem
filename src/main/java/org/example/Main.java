@@ -1,8 +1,10 @@
 package org.example;
 import java.util.Date;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        /*// CustomerManager oluşturuluyor
+        /*/ CustomerManager oluşturuluyor
         CustomerManager manager = new CustomerManager();
 
         // Müşteriler ekleniyor
@@ -33,7 +35,40 @@ public class Main {
         // Kargo işleme tekrar yapılıyor
         System.out.println("\nProcessing the next cargo from priority queue:");
         manager.processNextCargo();*/
-        CargoRoutingTree tree = new CargoRoutingTree();
-        tree.showCitiesAndDistricts();
+
+        CargoRoutingTree routingTree = new CargoRoutingTree();
+        Scanner scanner = new Scanner(System.in);
+
+        routingTree.showCitiesAndDistricts();
+
+        while (true) {
+            System.out.println("\nYeni bir kargo adresi eklemek için şehir ve ilçe bilgisi girin.");
+            System.out.print("Şehir (çıkmak için 'exit'): ");
+            String city = scanner.nextLine();
+            if (city.equalsIgnoreCase("exit")) break;
+
+            System.out.print("İlçe: ");
+            String district = scanner.nextLine();
+
+            // Ağaca adres ekleme
+            try {
+                routingTree.addCity(city);
+                routingTree.addDistrict(city, district);
+
+                // Teslim süresini hesaplama
+                int deliveryTime = routingTree.calculateDeliveryTime(city, district);
+                System.out.println("Teslim süresi: " + deliveryTime + " gün.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Hata: " + e.getMessage());
+            }
+
+            // Ağacı yazdırma
+            System.out.println("\nGüncel Kargo Ağı:");
+            routingTree.displayTree();
+        }
+
+        System.out.println("Kargo işlemi tamamlandı.");
+
+
     }
 }
