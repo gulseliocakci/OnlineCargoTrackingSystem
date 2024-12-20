@@ -36,11 +36,11 @@ public class Interface {
         int verticalSpacing = (screenHeight - 2 * buttonHeight) / 3; // 2 buton arası
 
         // Butonları oluşturuyoruz
-        JButton button1 = new JButton("Buton 1");
-        JButton button2 = new JButton("Buton 2");
-        JButton button3 = new JButton("Buton 3");
-        JButton button4 = new JButton("Buton 4");
-        JButton button5 = new JButton("Buton 5");
+        JButton button1 = new JButton("Yeni Müşteri Oluştur");
+        JButton button2 = new JButton("Yeni Kargo Gönder");
+        JButton button3 = new JButton("");
+        JButton button4 = new JButton("Kargo Geçmişi Sorgula");
+        JButton button5 = new JButton("Kargo Durumu Sorgula");
 
         // Butonları konumlandırıyoruz
         // Üst satırda 3 buton
@@ -56,14 +56,45 @@ public class Interface {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Kullanıcıdan 3 veri alıyoruz
+                // Müşteri ID'sini al
                 String customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+
+                // Müşteri ID'sinin boş olmasını engelle ve sadece sayılar kabul et
+                while (customerID == null || customerID.trim().isEmpty() || !customerID.matches("[0-9]+")) {
+                    if (customerID == null) return; // Eğer kullanıcı 'İptal' butonuna basarsa çık
+                    JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Müşteri ID girin (sadece sayılar).");
+                    customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+                }
+
+                // Müşteri Adını al
                 String customerFirstname = JOptionPane.showInputDialog(frame, "Müşteri Adı:");
+
+                // Müşteri Adı boş olmasın
+                while (customerFirstname == null || customerFirstname.trim().isEmpty()) {
+                    if (customerFirstname == null) return; // Kullanıcı 'İptal' butonuna basarsa çık
+                    JOptionPane.showMessageDialog(frame, "Müşteri Adı boş olamaz.");
+                    customerFirstname = JOptionPane.showInputDialog(frame, "Müşteri Adı:");
+                }
+
+                // Müşteri Soyadını al
                 String customerLastname = JOptionPane.showInputDialog(frame, "Müşteri Soyadı:");
 
-                customer.addCustomer(customerID, customerFirstname, customerLastname);
+                // Müşteri Soyadı boş olmasın
+                while (customerLastname == null || customerLastname.trim().isEmpty()) {
+                    if (customerLastname == null) return; // Kullanıcı 'İptal' butonuna basarsa çık
+                    JOptionPane.showMessageDialog(frame, "Müşteri Soyadı boş olamaz.");
+                    customerLastname = JOptionPane.showInputDialog(frame, "Müşteri Soyadı:");
+                }
+
+                // Verileri müşteri listesine ekle
+                if (customer.addCustomer(customerID, customerFirstname, customerLastname, frame)) {
+                    JOptionPane.showMessageDialog(frame, "Müşteri başarıyla eklendi!");
+                }
             }
         });
+
+
+
 
         button2.addActionListener(new ActionListener() {
             @Override

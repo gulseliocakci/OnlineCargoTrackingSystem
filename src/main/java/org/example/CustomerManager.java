@@ -1,4 +1,5 @@
 package org.example;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -15,10 +16,21 @@ public class CustomerManager {
     }
 
     // Müşteri ekleme
-    public void addCustomer(String customerId, String firstName, String lastName) {
+    public boolean addCustomer(String customerId, String firstName, String lastName, JFrame frame) {
+        // Müşteri ID'sinin benzersiz olup olmadığını kontrol et
+        if (findCustomerById(customerId) != null) {
+            // ID zaten varsa, kullanıcıya uyarı ver
+            JOptionPane.showMessageDialog(frame, "Bu Müşteri ID zaten var. Lütfen farklı bir ID girin.",
+                    "Hata", JOptionPane.ERROR_MESSAGE);
+            return false; // ID zaten varsa müşteri eklenmez
+        }
+
+        // Yeni müşteri oluşturuluyor
         Customer customer = new Customer(customerId, firstName, lastName);
-        customers.add(customer);
+        customers.add(customer); // Müşteri listeye ekleniyor
+        return true; // Müşteri başarıyla eklendi
     }
+
 
     // Müşteri ID'sine göre müşteri arama
     public Customer findCustomerById(String customerId) {
