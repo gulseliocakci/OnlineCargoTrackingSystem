@@ -93,9 +93,6 @@ public class Interface {
             }
         });
 
-
-
-
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
