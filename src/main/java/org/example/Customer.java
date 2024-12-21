@@ -37,16 +37,6 @@ public class Customer {
         this.cargos.add(cargo);
     }
 
-    // Aynı kargo ID'sine sahip bir kargo var mı kontrolü
-    public boolean hasCargoWithId(int cargoId) {
-        for (Cargo cargo : cargos) {
-            if (cargo.getCargoId() == cargoId) {
-                return true; // Eğer aynı ID'ye sahip bir kargo varsa
-            }
-        }
-        return false; // Eğer yoksa
-    }
-
     @Override
     public String toString() {
         return "Customer ID: " + customerId + ", Name: " + firstName + " " + lastName;

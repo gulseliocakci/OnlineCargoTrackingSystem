@@ -38,7 +38,7 @@ public class Interface {
         // Butonları oluşturuyoruz
         JButton button1 = new JButton("Yeni Müşteri Oluştur");
         JButton button2 = new JButton("Yeni Kargo Gönder");
-        JButton button3 = new JButton("");
+        JButton button3 = new JButton("Ağaç Yapısını Göster");
         JButton button4 = new JButton("Kargo Geçmişi Sorgula");
         JButton button5 = new JButton("Kargo Durumu Sorgula");
 
@@ -142,11 +142,19 @@ public class Interface {
                 boolean isUnique = false;
 
                 while (!isUnique) {
-                    cargoId = Integer.parseInt(JOptionPane.showInputDialog(frame, "Kargo ID:"));
-                    if (!customer.hasCargoWithId(cargoId)) {  // Customer sınıfındaki metodu kullanıyoruz
-                        isUnique = true; // ID benzersiz, işlemi sonlandır
+                    String cargoIdInput = JOptionPane.showInputDialog(frame, "Kargo ID:");
+
+                    // Kargo ID'si boş olmamalı ve sadece sayılar kabul edilmeli
+                    if (cargoIdInput == null || cargoIdInput.trim().isEmpty() || !cargoIdInput.matches("[0-9]+")) {
+                        JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Kargo ID girin (sadece sayılar).");
                     } else {
-                        JOptionPane.showMessageDialog(frame, "Bu Kargo ID'si zaten mevcut. Lütfen farklı bir ID girin.");
+                        cargoId = Integer.parseInt(cargoIdInput);
+
+                        if (!customerManager.hasCargoWithId(cargoId)) {  // Customer sınıfındaki metodu kullanıyoruz
+                            isUnique = true; // ID benzersiz, işlemi sonlandır
+                        } else {
+                            JOptionPane.showMessageDialog(frame, "Bu Kargo ID'si zaten mevcut. Lütfen farklı bir ID girin.");
+                        }
                     }
                 }
                 Date cargoDate = new Date(); // Kargo tarihi şu anki tarih olacak
@@ -170,9 +178,22 @@ public class Interface {
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 3. butona tıklandığında yapılacak işlem
+                // Ağaç yapısını alalım
+                StringBuilder treeStructure = new StringBuilder();
+
+                // CargoRoutingTree'deki ağaç yapısını displayTree metodu ile gösteriyoruz
+                cargoRoutingTree.displayTree(treeStructure);
+
+                // Eğer ağaç boşsa, kullanıcıya bilgilendirme mesajı gösterelim
+                if (treeStructure.toString().trim().isEmpty()) {
+                    treeStructure.append("Ağaç yapısına henüz şehir veya ilçe eklenmemiştir.\n");
+                }
+
+                // Ağaç yapısını kullanıcıya göstermek için bir JOptionPane kullanıyoruz
+                JOptionPane.showMessageDialog(frame, treeStructure.toString(), "Şehirler ve İlçeler", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+
 
         button4.addActionListener(new ActionListener() {
             @Override
@@ -202,4 +223,3 @@ public class Interface {
     }
 
 }
-

@@ -105,16 +105,17 @@ public class CargoRoutingTree {
         throw new IllegalArgumentException("City not found: " + cityName);
     }
 
-    // Display the tree structure
-    public void displayTree() {
-        System.out.println(cargoCenter.name); // Print root
+    // CargoRoutingTree sınıfındaki displayTree metodunu güncelleme
+    public void displayTree(StringBuilder sb) {
+        sb.append(cargoCenter.name).append("\n"); // Root node
         for (TreeNode city : cargoCenter.children) {
-            System.out.println("  -> " + city.name); // Print city
+            sb.append("  -> ").append(city.name).append("\n"); // Cities
             for (TreeNode district : city.children) {
-                System.out.println("    -> " + district.name); // Print district
+                sb.append("    -> ").append(district.name).append("\n"); // Districts
             }
         }
     }
+
     // List all cities and districts in a readable format
     public String getCitiesAndDistricts() {
         StringBuilder sb = new StringBuilder();

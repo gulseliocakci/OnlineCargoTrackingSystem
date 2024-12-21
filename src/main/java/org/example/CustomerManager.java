@@ -41,18 +41,32 @@ public class CustomerManager {
         return null; // Müşteri bulunamazsa null döner
     }
 
+    // Kargo ID'sinin benzersiz olup olmadığını kontrol et
+    public boolean hasCargoWithId(int cargoId) {
+        // Tüm müşterilerin kargo geçmişi kontrol ediliyor
+        for (Customer customer : customers) {
+            for (Cargo cargo : customer.getCargos()) {
+                if (cargo.getCargoId() == cargoId) {
+                    return true; // Eğer aynı ID'ye sahip bir kargo varsa
+                }
+            }
+        }
+        return false; // Eğer yoksa
+    }
+
+    // Kargo ekleme işlemi
     public void addCargoToCustomer(String customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime, JFrame frame) {
+        // Kargo ID kontrolü (tüm sistemde benzersiz olmalı)
+        if (hasCargoWithId(cargoId)) {
+            JOptionPane.showMessageDialog(frame, "Bu Kargo ID'si zaten mevcut. Lütfen farklı bir ID girin.",
+                    "Hata", JOptionPane.ERROR_MESSAGE);
+            return; // Aynı ID'ye sahip kargo varsa, kargo eklenmez
+        }
+
         // Müşteri bulma
         Customer customer = findCustomerById(customerId);
 
         if (customer != null) {
-            // Kargo ID kontrolü
-            if (customer.hasCargoWithId(cargoId)) {
-                JOptionPane.showMessageDialog(frame, "Bu Kargo ID'si zaten mevcut. Lütfen farklı bir ID girin.",
-                        "Hata", JOptionPane.ERROR_MESSAGE);
-                return; // Aynı ID'ye sahip kargo varsa, kargo eklenmez
-            }
-
             // Kargo nesnesini oluşturma
             Cargo cargo = new Cargo(cargoId, cargoDate, isDelivered, deliveryTime);
 
@@ -68,8 +82,6 @@ public class CustomerManager {
             System.out.println("Customer with ID " + customerId + " not found.");
         }
     }
-
-
 
     // Müşteri ID'sine göre kargo geçmişini sorgulama
     public void listCargoHistoryForCustomer(String customerId) {

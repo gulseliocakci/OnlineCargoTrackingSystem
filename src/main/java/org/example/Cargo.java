@@ -59,9 +59,4 @@ public class Cargo implements Comparable<Cargo> {
         return "Cargo ID: " + cargoId + ", Date: " + cargoDate +
                 ", Delivered: " + isDelivered + ", Delivery Time: " + deliveryTime + " days";
     }
-
-    // Kargo ID'si eşit olup olmadığını kontrol etme (benzersiz kargo ID kontrolü için kullanılır)
-    public boolean hasSameId(int cargoId) {
-        return this.cargoId == cargoId;
-    }
 }
