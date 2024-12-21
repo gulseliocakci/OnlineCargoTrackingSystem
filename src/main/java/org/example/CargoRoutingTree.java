@@ -1,5 +1,4 @@
 package org.example;
-
 import java.util.*;
 
 // CargoRoutingTree class
@@ -24,10 +23,22 @@ public class CargoRoutingTree {
 
     // Root node (Cargo Center)
     private final TreeNode cargoCenter;
+    // Harita: Şehir -> İlçeler
+    private Map<String, List<String>> cityDistrictMap;
 
     // Constructor
     public CargoRoutingTree() {
         this.cargoCenter = new TreeNode("Cargo Center", 0); // Root node
+        // Şehir ve ilçeleri burada tanımlıyoruz
+        cityDistrictMap = new HashMap<>();
+
+        // Örnek şehirler ve ilçeler
+        cityDistrictMap.put("İstanbul", Arrays.asList("Üsküdar", "Kadıköy", "Beyoğlu"));
+        cityDistrictMap.put("Ankara", Arrays.asList("Çankaya", "Keçiören", "Mamak"));
+        cityDistrictMap.put("İzmir", Arrays.asList("Konak", "Karşıyaka", "Bornova"));
+        cityDistrictMap.put("Bursa", Arrays.asList("Osmangazi", "Nilüfer", "Yıldırım"));
+        cityDistrictMap.put("Antalya", Arrays.asList("Muratpaşa", "Kepez", "Konyaaltı"));
+        // Daha fazla şehir ve ilçe eklenebilir
     }
 
     // Add a city to the tree
@@ -62,6 +73,20 @@ public class CargoRoutingTree {
         throw new IllegalArgumentException("City not found: " + cityName);
     }
 
+    // Şehir var mı kontrol et
+    public boolean cityExists(String cityName) {
+        return cityDistrictMap.containsKey(cityName);
+    }
+
+    // İlçe var mı ve şehirle uyumlu mu kontrol et
+    public boolean districtExists(String cityName, String districtName) {
+        if (cityExists(cityName)) {
+            List<String> districts = cityDistrictMap.get(cityName);
+            return districts.contains(districtName);
+        }
+        return false;
+    }
+
     // Calculate delivery time based on depth
     public int calculateDeliveryTime(String cityName, String districtName) {
         for (TreeNode city : cargoCenter.children) {
@@ -90,26 +115,21 @@ public class CargoRoutingTree {
             }
         }
     }
-
-    public void showCitiesAndDistricts() {
-        String[] cities = {"İstanbul", "Ankara", "Trabzon", "İzmir", "Hatay"};
-        String[] district = {
-                "Üsküdar", "Beyoğlu", "Bakırköy",
-                "Çankaya", "Keçiören", "Mamak",
-                "Ortahisar", "Sürmene", "Akçaabat",
-                "Konak", "Alsancak", "Karşıyaka",
-                "Antakya", "İskenderun", "Defne"
-        };
-        int i, j;
-        int districtIndex = 0;
-
-        for (i = 0; i < cities.length; i++) {
-            System.out.println(cities[i] + ": ");
-            for (j = 0; j < 3; j++) {  // Her şehire 3 ilçe yazdırıyoruz
-                System.out.println("-> " + district[districtIndex]);
-                districtIndex++;  // Bir sonraki ilçeye geçiyoruz
+    // List all cities and districts in a readable format
+    public String getCitiesAndDistricts() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, List<String>> entry : cityDistrictMap.entrySet()) {
+            String city = entry.getKey();
+            List<String> districts = entry.getValue();
+            sb.append("Şehir: ").append(city).append("\n");
+            for (String district : districts) {
+                sb.append("  İlçe: ").append(district).append("\n");
             }
         }
-
+        sb.append("\nLütfen şehir ve ilçe ismini doğru yazdığınızdan emin olunuz.");
+        return sb.toString();  // Return the formatted string
     }
+
+
 }
+

@@ -1,5 +1,4 @@
 package org.example;
-
 import java.util.LinkedList;
 
 public class Customer {
@@ -36,6 +35,16 @@ public class Customer {
     // Yeni addCargo metodu
     public void addCargo(Cargo cargo) {
         this.cargos.add(cargo);
+    }
+
+    // Aynı kargo ID'sine sahip bir kargo var mı kontrolü
+    public boolean hasCargoWithId(int cargoId) {
+        for (Cargo cargo : cargos) {
+            if (cargo.getCargoId() == cargoId) {
+                return true; // Eğer aynı ID'ye sahip bir kargo varsa
+            }
+        }
+        return false; // Eğer yoksa
     }
 
     @Override

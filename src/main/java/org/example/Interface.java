@@ -1,14 +1,14 @@
 package org.example;
-
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Interface {
     JFrame frame;  // JFrame nesnesi
     JPanel panel;  // Butonları yerleştireceğimiz panel
-    CustomerManager customer = new CustomerManager();
+    CustomerManager customerManager = new CustomerManager();
     CargoRoutingTree cargoRoutingTree = new CargoRoutingTree();
     //Cargo cargo = new Cargo();
 
@@ -87,7 +87,7 @@ public class Interface {
                 }
 
                 // Verileri müşteri listesine ekle
-                if (customer.addCustomer(customerID, customerFirstname, customerLastname, frame)) {
+                if (customerManager.addCustomer(customerID, customerFirstname, customerLastname, frame)) {
                     JOptionPane.showMessageDialog(frame, "Müşteri başarıyla eklendi!");
                 }
             }
@@ -96,7 +96,74 @@ public class Interface {
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 2. butona tıklandığında yapılacak işlem
+                // Kullanıcıdan Müşteri ID'sini alıyoruz
+                String customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+
+                // Müşteri ID'sinin boş olmasını engelle ve sadece sayılar kabul et
+                while (customerID == null || customerID.trim().isEmpty() || !customerID.matches("[0-9]+")) {
+                    if (customerID == null) return; // Eğer kullanıcı 'İptal' butonuna basarsa çık
+                    JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Müşteri ID girin (sadece sayılar).");
+                    customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+                }
+
+                // Müşteri var mı diye kontrol ediyoruz
+                Customer customer = customerManager.findCustomerById(customerID);
+                if (customer == null) {
+                    JOptionPane.showMessageDialog(frame, "Bu Müşteri ID ile kayıtlı bir müşteri bulunmamaktadır.");
+                    return;
+                }
+                // Şehir ve ilçeleri listele
+                String citiesAndDistricts = cargoRoutingTree.getCitiesAndDistricts();
+                // Listeyi bir dialog penceresinde göster
+                JOptionPane.showMessageDialog(frame, citiesAndDistricts, "Şehirler ve İlçeler", JOptionPane.INFORMATION_MESSAGE);
+
+                // CargoRoutingTree'den şehir ve ilçe bilgileri alınıp kullanıcıya bilgilendirme yapılacak
+                String cityName = JOptionPane.showInputDialog(frame, "Şehir Adı:");
+                // Şehir kontrolü
+                while (cityName == null || cityName.trim().isEmpty() || !cargoRoutingTree.cityExists(cityName)) {
+                    if (cityName == null) return;
+                    JOptionPane.showMessageDialog(frame, "Geçersiz şehir adı. Lütfen geçerli bir şehir girin.");
+                    cityName = JOptionPane.showInputDialog(frame, "Şehir Adı:");
+                }
+
+                String districtName = JOptionPane.showInputDialog(frame, "İlçe Adı:");
+                // İlçe kontrolü
+                while (districtName == null || districtName.trim().isEmpty() || !cargoRoutingTree.districtExists(cityName, districtName)) {
+                    if (districtName == null) return;
+                    JOptionPane.showMessageDialog(frame, "Geçersiz ilçe adı. Lütfen geçerli bir ilçe girin.");
+                    districtName = JOptionPane.showInputDialog(frame, "İlçe Adı:");
+                }
+                // Şehir ve İlçe, CargoRoutingTree'ye ekleniyor
+                cargoRoutingTree.addCity(cityName); // Şehri ekle
+                cargoRoutingTree.addDistrict(cityName, districtName); // İlçeyi ekle
+
+                // Kargo ID'sinin benzersiz olup olmadığını kontrol et
+                int cargoId = -1;
+                boolean isUnique = false;
+
+                while (!isUnique) {
+                    cargoId = Integer.parseInt(JOptionPane.showInputDialog(frame, "Kargo ID:"));
+                    if (!customer.hasCargoWithId(cargoId)) {  // Customer sınıfındaki metodu kullanıyoruz
+                        isUnique = true; // ID benzersiz, işlemi sonlandır
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Bu Kargo ID'si zaten mevcut. Lütfen farklı bir ID girin.");
+                    }
+                }
+                Date cargoDate = new Date(); // Kargo tarihi şu anki tarih olacak
+                boolean isDelivered = false; // Kargo henüz teslim edilmedi
+
+                // Teslimat süresi hesaplanacak
+                int deliveryTime = cargoRoutingTree.calculateDeliveryTime(cityName, districtName);
+                if (deliveryTime == -1) {
+                    JOptionPane.showMessageDialog(frame, "Teslimat süresi hesaplanamadı.");
+                    return;
+                }
+
+                // Kargo ekleme işlemi için CustomerManager sınıfındaki addCargoToCustomer metodunu kullanıyoruz
+                customerManager.addCargoToCustomer(customerID, cargoId, cargoDate, isDelivered, deliveryTime, frame);
+
+                // Kargo eklendikten sonra kullanıcıya bilgi ver
+                JOptionPane.showMessageDialog(frame, "Kargo başarıyla eklendi!\nTeslimat Süresi: " + deliveryTime + " gün");
             }
         });
 
@@ -135,3 +202,4 @@ public class Interface {
     }
 
 }
+

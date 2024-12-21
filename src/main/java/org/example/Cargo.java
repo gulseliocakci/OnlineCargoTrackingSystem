@@ -20,16 +20,32 @@ public class Cargo implements Comparable<Cargo> {
         return cargoId;
     }
 
+    public void setCargoId(int cargoId) {
+        this.cargoId = cargoId;
+    }
+
     public Date getCargoDate() {
         return cargoDate;
+    }
+
+    public void setCargoDate(Date cargoDate) {
+        this.cargoDate = cargoDate;
     }
 
     public boolean isDelivered() {
         return isDelivered;
     }
 
+    public void setDelivered(boolean delivered) {
+        isDelivered = delivered;
+    }
+
     public int getDeliveryTime() {
         return deliveryTime;
+    }
+
+    public void setDeliveryTime(int deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 
     // Teslimat süresine göre karşılaştırma (daha kısa teslimat süresi olan önceliklidir)
@@ -42,5 +58,10 @@ public class Cargo implements Comparable<Cargo> {
     public String toString() {
         return "Cargo ID: " + cargoId + ", Date: " + cargoDate +
                 ", Delivered: " + isDelivered + ", Delivery Time: " + deliveryTime + " days";
+    }
+
+    // Kargo ID'si eşit olup olmadığını kontrol etme (benzersiz kargo ID kontrolü için kullanılır)
+    public boolean hasSameId(int cargoId) {
+        return this.cargoId == cargoId;
     }
 }

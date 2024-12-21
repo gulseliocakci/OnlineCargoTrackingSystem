@@ -12,7 +12,7 @@ public class CustomerManager {
     // Constructor
     public CustomerManager() {
         this.customers = new ArrayList<>();
-        this.cargoPriorityQueue = new PriorityQueue<>(); // Teslimat süresine göre sıralanmış kargo kuyruğu
+        this.cargoPriorityQueue = new PriorityQueue<>((c1, c2) -> Integer.compare(c1.getDeliveryTime(), c2.getDeliveryTime())); // Teslimat süresine göre sıralama
     }
 
     // Müşteri ekleme
@@ -31,7 +31,6 @@ public class CustomerManager {
         return true; // Müşteri başarıyla eklendi
     }
 
-
     // Müşteri ID'sine göre müşteri arama
     public Customer findCustomerById(String customerId) {
         for (Customer customer : customers) {
@@ -42,36 +41,35 @@ public class CustomerManager {
         return null; // Müşteri bulunamazsa null döner
     }
 
-    // Kargo ekleme ve Priority Queue'ya ekleme
-    public void addCargoToCustomer(String customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
+    public void addCargoToCustomer(String customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime, JFrame frame) {
         // Müşteri bulma
         Customer customer = findCustomerById(customerId);
 
         if (customer != null) {
+            // Kargo ID kontrolü
+            if (customer.hasCargoWithId(cargoId)) {
+                JOptionPane.showMessageDialog(frame, "Bu Kargo ID'si zaten mevcut. Lütfen farklı bir ID girin.",
+                        "Hata", JOptionPane.ERROR_MESSAGE);
+                return; // Aynı ID'ye sahip kargo varsa, kargo eklenmez
+            }
+
             // Kargo nesnesini oluşturma
             Cargo cargo = new Cargo(cargoId, cargoDate, isDelivered, deliveryTime);
 
-            // Müşteriye kargo ekleme (tarih sırasına göre)
-            customer.addCargo(cargo); // Müşteriye kargo ekleniyor, tarih sırasına göre
+            // Kargo nesnesini müşteriye ekleme
+            customer.addCargo(cargo); // Müşteriye kargo ekleniyor
 
             // Kargoyu PriorityQueue'ya ekleme (Teslimat süresine göre sıralı eklenir)
             cargoPriorityQueue.add(cargo); // PriorityQueue'da teslimat süresine göre sıralama yapılır
+
+            // Kargo ekleme işlemi başarıyla tamamlandığında kullanıcıya bilgi ver
+            JOptionPane.showMessageDialog(frame, "Kargo başarıyla eklendi!\nTeslimat Süresi: " + deliveryTime + " gün");
         } else {
             System.out.println("Customer with ID " + customerId + " not found.");
         }
     }
 
 
-    // Kargo işleme
-    public void processNextCargo() {
-        if (!cargoPriorityQueue.isEmpty()) {
-            Cargo cargo = cargoPriorityQueue.poll(); // En öncelikli kargo (en kısa teslimat süresi) alınır
-            System.out.println("Processing Cargo: " + cargo);
-            // Kargo işleme işlemleri (teslimat durumu güncellenebilir)
-        } else {
-            System.out.println("No cargo to process.");
-        }
-    }
 
     // Müşteri ID'sine göre kargo geçmişini sorgulama
     public void listCargoHistoryForCustomer(String customerId) {
@@ -104,4 +102,3 @@ public class CustomerManager {
         }
     }
 }
-
