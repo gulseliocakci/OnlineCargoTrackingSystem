@@ -133,9 +133,6 @@ public class Interface {
                     JOptionPane.showMessageDialog(frame, "Geçersiz ilçe adı. Lütfen geçerli bir ilçe girin.");
                     districtName = JOptionPane.showInputDialog(frame, "İlçe Adı:");
                 }
-                // Şehir ve İlçe, CargoRoutingTree'ye ekleniyor
-                cargoRoutingTree.addCity(cityName); // Şehri ekle
-                cargoRoutingTree.addDistrict(cityName, districtName); // İlçeyi ekle
 
                 // Kargo ID'sinin benzersiz olup olmadığını kontrol et
                 int cargoId = -1;
@@ -183,11 +180,6 @@ public class Interface {
 
                 // CargoRoutingTree'deki ağaç yapısını displayTree metodu ile gösteriyoruz
                 cargoRoutingTree.displayTree(treeStructure);
-
-                // Eğer ağaç boşsa, kullanıcıya bilgilendirme mesajı gösterelim
-                if (treeStructure.toString().trim().isEmpty()) {
-                    treeStructure.append("Ağaç yapısına henüz şehir veya ilçe eklenmemiştir.\n");
-                }
 
                 // Ağaç yapısını kullanıcıya göstermek için bir JOptionPane kullanıyoruz
                 JOptionPane.showMessageDialog(frame, treeStructure.toString(), "Şehirler ve İlçeler", JOptionPane.INFORMATION_MESSAGE);

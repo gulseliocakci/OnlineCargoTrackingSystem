@@ -75,9 +75,6 @@ public class CustomerManager {
 
             // Kargoyu PriorityQueue'ya ekleme (Teslimat süresine göre sıralı eklenir)
             cargoPriorityQueue.add(cargo); // PriorityQueue'da teslimat süresine göre sıralama yapılır
-
-            // Kargo ekleme işlemi başarıyla tamamlandığında kullanıcıya bilgi ver
-            JOptionPane.showMessageDialog(frame, "Kargo başarıyla eklendi!\nTeslimat Süresi: " + deliveryTime + " gün");
         } else {
             System.out.println("Customer with ID " + customerId + " not found.");
         }
