@@ -117,7 +117,7 @@ public class CargoRoutingTree {
             sb.append("  -> ").append(city.name).append("\n"); // Cities
             for (TreeNode district : city.children) {
                 sb.append("    -> ").append(district.name)
-                        .append(" (Delivery Time: ").append(district.deliveryTime).append(" days)\n"); // Districts
+                        .append(" (Teslimat Süresi: ").append(district.deliveryTime).append(" gün)\n"); // Districts
             }
         }
     }
