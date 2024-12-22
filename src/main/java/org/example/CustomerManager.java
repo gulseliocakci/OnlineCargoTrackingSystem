@@ -108,6 +108,17 @@ public class CustomerManager {
             }
         }
     }
+    public Cargo findCargoById(int cargoId) {
+        for (Customer customer : customers) {
+            for (Cargo cargo : customer.getCargos()) {
+                if (cargo.getCargoId() == cargoId) {
+                    return cargo;
+                }
+            }
+        }
+        return null; // Eğer kargo bulunmazsa null döner
+    }
+
 
     // PriorityQueue'daki tüm kargoları listeleme
     public void listPriorityQueue() {

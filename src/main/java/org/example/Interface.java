@@ -218,9 +218,39 @@ public class Interface {
         button5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 5. butona tıklandığında yapılacak işlem
+                // Kargo ID'sini alıyoruz
+                String cargoIDInput = JOptionPane.showInputDialog(frame, "Kargo ID:");
+
+                // Kargo ID'sinin boş olmasını engelle ve sadece sayılar kabul et
+                while (cargoIDInput == null || cargoIDInput.trim().isEmpty() || !cargoIDInput.matches("[0-9]+")) {
+                    if (cargoIDInput == null) return; // Eğer kullanıcı 'İptal' butonuna basarsa çık
+                    JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Kargo ID girin (sadece sayılar).");
+                    cargoIDInput = JOptionPane.showInputDialog(frame, "Kargo ID:");
+                }
+
+                int cargoID = Integer.parseInt(cargoIDInput);
+
+                // Kargo ID'sini kullanarak kargo bilgilerini buluyoruz
+                Cargo cargo = customerManager.findCargoById(cargoID);
+
+                if (cargo == null) {
+                    JOptionPane.showMessageDialog(frame, "Bu Kargo ID'sine ait bir kargo bulunamadı.");
+                    return;
+                }
+
+                // Kargo bilgilerini göstermek için bir StringBuilder kullanabiliriz
+                StringBuilder cargoDetails = new StringBuilder();
+                cargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
+                        //.append("Müşteri ID: ").append(cargo.getCustomerId()).append("\n")
+                        .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
+                        .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
+                        .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n");
+
+                // Kargo bilgilerini kullanıcıya göster
+                JOptionPane.showMessageDialog(frame, cargoDetails.toString(), "Kargo Bilgisi", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+
 
         // Butonları panel'e ekliyoruz
         panel.add(button1);
