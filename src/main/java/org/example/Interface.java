@@ -2,6 +2,7 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,7 @@ public class Interface {
     JPanel panel;  // Butonları yerleştireceğimiz panel
     CustomerManager customerManager = new CustomerManager();
     CargoRoutingTree cargoRoutingTree = new CargoRoutingTree();
+    Stack<Cargo> cargoStack = new Stack<>();
     //Cargo cargo = new Cargo();
 
     // Constructor (Yapıcı) metodunda JFrame'i ayarlıyoruz
@@ -41,6 +43,7 @@ public class Interface {
         JButton button3 = new JButton("Ağaç Yapısını Göster");
         JButton button4 = new JButton("Kargo Geçmişi Sorgula");
         JButton button5 = new JButton("Kargo Durumu Sorgula");
+        JButton button6 = new JButton("Tüm Kargoları Göster");
 
         // Butonları konumlandırıyoruz
         // Üst satırda 3 buton
@@ -48,9 +51,10 @@ public class Interface {
         button2.setBounds((screenWidth - buttonWidth) / 2, verticalSpacing, buttonWidth, buttonHeight); // Ortada buton
         button3.setBounds(screenWidth - horizontalSpacing - buttonWidth, verticalSpacing, buttonWidth, buttonHeight); // Sağ buton
 
-        // Alt satırda 2 buton
-        button4.setBounds(horizontalSpacing + (screenWidth - 3 * buttonWidth) / 4, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sol buton
-        button5.setBounds(screenWidth - horizontalSpacing - buttonWidth - (screenWidth - 3 * buttonWidth) / 4, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sağ buton
+        // Alt satırda 3 buton
+        button4.setBounds(horizontalSpacing + (screenWidth - 4 * buttonWidth) / 5, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sol buton
+        button5.setBounds((screenWidth - buttonWidth) / 2, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt ortada buton
+        button6.setBounds(screenWidth - horizontalSpacing - buttonWidth - (screenWidth - 4 * buttonWidth) / 5, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sağ buton
 
         // Her bir butona ActionListener ekliyoruz
         button1.addActionListener(new ActionListener() {
@@ -93,6 +97,7 @@ public class Interface {
             }
         });
 
+
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,7 +125,7 @@ public class Interface {
                 // CargoRoutingTree'den şehir ve ilçe bilgileri alınıp kullanıcıya bilgilendirme yapılacak
                 String cityName = JOptionPane.showInputDialog(frame, "Şehir Adı:");
                 // Şehir kontrolü
-                while (cityName == null || cityName.trim().isEmpty() || !cargoRoutingTree.cityExists(cityName)) {
+                while (cityName == null||  cityName.trim().isEmpty() || !cargoRoutingTree.cityExists(cityName)) {
                     if (cityName == null) return;
                     JOptionPane.showMessageDialog(frame, "Geçersiz şehir adı. Lütfen geçerli bir şehir girin.");
                     cityName = JOptionPane.showInputDialog(frame, "Şehir Adı:");
@@ -128,7 +133,7 @@ public class Interface {
 
                 String districtName = JOptionPane.showInputDialog(frame, "İlçe Adı:");
                 // İlçe kontrolü
-                while (districtName == null || districtName.trim().isEmpty() || !cargoRoutingTree.districtExists(cityName, districtName)) {
+                while (districtName == null||  districtName.trim().isEmpty() || !cargoRoutingTree.districtExists(cityName, districtName)) {
                     if (districtName == null) return;
                     JOptionPane.showMessageDialog(frame, "Geçersiz ilçe adı. Lütfen geçerli bir ilçe girin.");
                     districtName = JOptionPane.showInputDialog(frame, "İlçe Adı:");
@@ -136,13 +141,11 @@ public class Interface {
 
                 // Kargo ID'sinin benzersiz olup olmadığını kontrol et
                 int cargoId = -1;
-                boolean isUnique = false;
-
-                while (!isUnique) {
+                boolean isUnique = false;while (!isUnique) {
                     String cargoIdInput = JOptionPane.showInputDialog(frame, "Kargo ID:");
 
                     // Kargo ID'si boş olmamalı ve sadece sayılar kabul edilmeli
-                    if (cargoIdInput == null || cargoIdInput.trim().isEmpty() || !cargoIdInput.matches("[0-9]+")) {
+                    if (cargoIdInput == null||  cargoIdInput.trim().isEmpty() || !cargoIdInput.matches("[0-9]+")) {
                         JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Kargo ID girin (sadece sayılar).");
                     } else {
                         cargoId = Integer.parseInt(cargoIdInput);
@@ -167,10 +170,24 @@ public class Interface {
                 // Kargo ekleme işlemi için CustomerManager sınıfındaki addCargoToCustomer metodunu kullanıyoruz
                 customerManager.addCargoToCustomer(customerID, cargoId, cargoDate, isDelivered, deliveryTime, frame);
 
+
+
+                // Kargo objesini oluştur ve yığına ekle
+                Cargo cargo = new Cargo(cargoId, cargoDate, false, deliveryTime);
+                cargoStack.push(cargo);
+
+                // Yığına 5'ten fazla kargo eklenirse en eski kargo çıkarılacak
+                if (cargoStack.size() > 5) {
+                    cargoStack.pop();
+                }
+
+
                 // Kargo eklendikten sonra kullanıcıya bilgi ver
                 JOptionPane.showMessageDialog(frame, "Kargo başarıyla eklendi!\nTeslimat Süresi: " + deliveryTime + " gün");
             }
         });
+
+
 
         button3.addActionListener(new ActionListener() {
             @Override
@@ -189,21 +206,20 @@ public class Interface {
 
         button4.addActionListener(new ActionListener() {
             @Override
-            // 4. butona tıklandığında yapılacak işlem
-
             public void actionPerformed(ActionEvent e) {
-                String customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+                StringBuilder last5CargoDetails = new StringBuilder();
 
-                // Müşteri ID'sinin boş olmasını engelle ve sadece sayılar kabul et
-                while (customerID == null || customerID.trim().isEmpty() || !customerID.matches("[0-9]+")) {
-                    if (customerID == null) return; // Eğer kullanıcı 'İptal' butonuna basarsa çık
-                    JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Müşteri ID girin (sadece sayılar).");
-                    customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
-
+                // Yığındaki son 5 kargoyu al
+                for (Cargo cargo : cargoStack) {
+                    last5CargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
+                            .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
+                            .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
+                            .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n")
+                            .append("--------------------------------------\n");
                 }
-                customerManager.listCargoHistoryForCustomer(customerID,frame);
 
-
+                // Kargo bilgilerini bir dialog penceresinde gösteriyoruz
+                JOptionPane.showMessageDialog(frame, last5CargoDetails.toString(), "Son 5 Kargo", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -233,7 +249,6 @@ public class Interface {
                 // Kargo bilgilerini göstermek için bir StringBuilder kullanabiliriz
                 StringBuilder cargoDetails = new StringBuilder();
                 cargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
-                        //.append("Müşteri ID: ").append(cargo.getCustomerId()).append("\n")
                         .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
                         .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
                         .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n");
@@ -244,12 +259,44 @@ public class Interface {
         });
 
 
+
+        button6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Sistemdeki tüm kargoları alıyoruz
+                StringBuilder allCargoDetails = new StringBuilder();
+
+                // CustomerManager'dan tüm kargoları alıyoruz
+                List<Cargo> allCargos = customerManager.getAllCargos();
+
+                // Eğer kargo yoksa, kullanıcıya bilgi vereceğiz
+                if (allCargos.isEmpty()) {
+                    allCargoDetails.append("Şu anda sistemde hiçbir kargo bulunmamaktadır.\n");
+                } else {
+                    // Kargo bilgilerini listeye ekliyoruz
+                    for (Cargo cargo : allCargos) {
+                        allCargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
+                                .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
+                                .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
+                                .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n")
+                                .append("--------------------------------------\n");
+                    }
+                }
+
+                // Kargo bilgilerini bir dialog penceresinde gösteriyoruz
+                JOptionPane.showMessageDialog(frame, allCargoDetails.toString(), "Tüm Kargolar", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+
+
         // Butonları panel'e ekliyoruz
         panel.add(button1);
         panel.add(button2);
         panel.add(button3);
         panel.add(button4);
         panel.add(button5);
+        panel.add(button6);
 
         // Panel'i frame'e ekliyoruz
         frame.add(panel);

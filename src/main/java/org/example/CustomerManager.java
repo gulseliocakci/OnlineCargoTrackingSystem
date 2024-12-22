@@ -117,6 +117,17 @@ public class CustomerManager {
     }
 
 
+    public List<Cargo> getAllCargos() {
+        List<Cargo> allCargos = new ArrayList<>();
+        // Tüm müşterilerdeki kargo listelerini alıyoruz
+        for (Customer customer : customers)  {
+            allCargos.addAll(customer.getCargos());  // Müşterinin kargo listesine ekliyoruz
+        }
+        return allCargos;
+    }
+
+
+
     // PriorityQueue'daki tüm kargoları listeleme
     public void listPriorityQueue() {
         System.out.println("Priority Queue (Sorted by Delivery Time):");
