@@ -40,21 +40,25 @@ public class Interface {
         // Butonları oluşturuyoruz
         JButton button1 = new JButton("Yeni Müşteri Oluştur");
         JButton button2 = new JButton("Yeni Kargo Gönder");
-        JButton button3 = new JButton("Ağaç Yapısını Göster");
+        JButton button3 = new JButton("Tüm Kargoları Göster");
         JButton button4 = new JButton("Kargo Geçmişi Sorgula");
         JButton button5 = new JButton("Kargo Durumu Sorgula");
-        JButton button6 = new JButton("Tüm Kargoları Göster");
+        JButton button6 = new JButton("Kargo Durumu Güncelle");
+        JButton button7 = new JButton("Ağaç Yapısını Göster");  // Ortada olacak yeni buton
 
-        // Butonları konumlandırıyoruz
-        // Üst satırda 3 buton
+        // 3x3 Grid düzeni, 7. buton tam ortada olacak
+        // 1. satır (üstteki satır) - Buton 1, 2, 3
         button1.setBounds(horizontalSpacing, verticalSpacing, buttonWidth, buttonHeight); // Sol buton
         button2.setBounds((screenWidth - buttonWidth) / 2, verticalSpacing, buttonWidth, buttonHeight); // Ortada buton
         button3.setBounds(screenWidth - horizontalSpacing - buttonWidth, verticalSpacing, buttonWidth, buttonHeight); // Sağ buton
 
-        // Alt satırda 3 buton
-        button4.setBounds(horizontalSpacing + (screenWidth - 4 * buttonWidth) / 5, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sol buton
+        // 2. satır (orta satır) - Buton 4, 5, 6
+        button4.setBounds(horizontalSpacing, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sol buton
         button5.setBounds((screenWidth - buttonWidth) / 2, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt ortada buton
-        button6.setBounds(screenWidth - horizontalSpacing - buttonWidth - (screenWidth - 4 * buttonWidth) / 5, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sağ buton
+        button6.setBounds(screenWidth - horizontalSpacing - buttonWidth, verticalSpacing + buttonHeight + verticalSpacing, buttonWidth, buttonHeight); // Alt sağ buton
+
+        // 3. satır (alt satır) - 7. buton ekranın tam ortasında
+        button7.setBounds((screenWidth - buttonWidth) / 2, (screenHeight - buttonHeight) / 2, buttonWidth, buttonHeight); // Ekranın tam ortasında
 
         // Her bir butona ActionListener ekliyoruz
         button1.addActionListener(new ActionListener() {
@@ -192,14 +196,28 @@ public class Interface {
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Ağaç yapısını alalım
-                StringBuilder treeStructure = new StringBuilder();
+                // Sistemdeki tüm kargoları alıyoruz
+                StringBuilder allCargoDetails = new StringBuilder();
 
-                // CargoRoutingTree'deki ağaç yapısını displayTree metodu ile gösteriyoruz
-                cargoRoutingTree.displayTree(treeStructure);
+                // CustomerManager'dan tüm kargoları alıyoruz
+                List<Cargo> allCargos = customerManager.getAllCargos();
 
-                // Ağaç yapısını kullanıcıya göstermek için bir JOptionPane kullanıyoruz
-                JOptionPane.showMessageDialog(frame, treeStructure.toString(), "Şehirler ve İlçeler", JOptionPane.INFORMATION_MESSAGE);
+                // Eğer kargo yoksa, kullanıcıya bilgi vereceğiz
+                if (allCargos.isEmpty()) {
+                    allCargoDetails.append("Şu anda sistemde hiçbir kargo bulunmamaktadır.\n");
+                } else {
+                    // Kargo bilgilerini listeye ekliyoruz
+                    for (Cargo cargo : allCargos) {
+                        allCargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
+                                .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
+                                .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
+                                .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n")
+                                .append("--------------------------------------\n");
+                    }
+                }
+
+                // Kargo bilgilerini bir dialog penceresinde gösteriyoruz
+                JOptionPane.showMessageDialog(frame, allCargoDetails.toString(), "Tüm Kargolar", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -258,33 +276,24 @@ public class Interface {
             }
         });
 
-
-
         button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Sistemdeki tüm kargoları alıyoruz
-                StringBuilder allCargoDetails = new StringBuilder();
 
-                // CustomerManager'dan tüm kargoları alıyoruz
-                List<Cargo> allCargos = customerManager.getAllCargos();
+            }
+        });
 
-                // Eğer kargo yoksa, kullanıcıya bilgi vereceğiz
-                if (allCargos.isEmpty()) {
-                    allCargoDetails.append("Şu anda sistemde hiçbir kargo bulunmamaktadır.\n");
-                } else {
-                    // Kargo bilgilerini listeye ekliyoruz
-                    for (Cargo cargo : allCargos) {
-                        allCargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
-                                .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
-                                .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
-                                .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n")
-                                .append("--------------------------------------\n");
-                    }
-                }
+        button7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Ağaç yapısını alalım
+                StringBuilder treeStructure = new StringBuilder();
 
-                // Kargo bilgilerini bir dialog penceresinde gösteriyoruz
-                JOptionPane.showMessageDialog(frame, allCargoDetails.toString(), "Tüm Kargolar", JOptionPane.INFORMATION_MESSAGE);
+                // CargoRoutingTree'deki ağaç yapısını displayTree metodu ile gösteriyoruz
+                cargoRoutingTree.displayTree(treeStructure);
+
+                // Ağaç yapısını kullanıcıya göstermek için bir JOptionPane kullanıyoruz
+                JOptionPane.showMessageDialog(frame, treeStructure.toString(), "Şehirler ve İlçeler", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -297,6 +306,7 @@ public class Interface {
         panel.add(button4);
         panel.add(button5);
         panel.add(button6);
+        panel.add(button7);
 
         // Panel'i frame'e ekliyoruz
         frame.add(panel);
