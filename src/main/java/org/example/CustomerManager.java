@@ -84,15 +84,18 @@ public class CustomerManager {
     }
 
     // Müşteri ID'sine göre kargo geçmişini sorgulama
-    public void listCargoHistoryForCustomer(String customerId) {
+    public void listCargoHistoryForCustomer(String customerId, JFrame frame) {
         Customer customer = findCustomerById(customerId);
         if (customer != null) {
-            System.out.println("Cargo History for Customer ID: " + customerId);
+            StringBuilder cargoHistory = new StringBuilder();
+            cargoHistory.append("Kargo Geçmişi (Müşteri ID: ").append(customerId).append("):\n");
             for (Cargo cargo : customer.getCargos()) {
-                System.out.println(cargo);
+                cargoHistory.append(cargo).append("\n");
             }
+            // Kargo geçmişini bir dialog penceresinde göster
+            JOptionPane.showMessageDialog(frame, cargoHistory.toString(), "Kargo Geçmişi", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            System.out.println("Customer with ID " + customerId + " not found.");
+            JOptionPane.showMessageDialog(frame, "Müşteri ID bulunamadı: " + customerId, "Hata", JOptionPane.ERROR_MESSAGE);
         }
     }
 

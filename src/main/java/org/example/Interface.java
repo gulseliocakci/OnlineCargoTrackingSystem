@@ -197,8 +197,21 @@ public class Interface {
 
         button4.addActionListener(new ActionListener() {
             @Override
+            // 4. butona tıklandığında yapılacak işlem
+
             public void actionPerformed(ActionEvent e) {
-                // 4. butona tıklandığında yapılacak işlem
+                String customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+
+                // Müşteri ID'sinin boş olmasını engelle ve sadece sayılar kabul et
+                while (customerID == null || customerID.trim().isEmpty() || !customerID.matches("[0-9]+")) {
+                    if (customerID == null) return; // Eğer kullanıcı 'İptal' butonuna basarsa çık
+                    JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Müşteri ID girin (sadece sayılar).");
+                    customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+
+                }
+                customerManager.listCargoHistoryForCustomer(customerID,frame);
+
+
             }
         });
 

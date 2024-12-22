@@ -56,7 +56,7 @@ public class Cargo implements Comparable<Cargo> {
 
     @Override
     public String toString() {
-        return "Cargo ID: " + cargoId + ", Date: " + cargoDate +
-                ", Delivered: " + isDelivered + ", Delivery Time: " + deliveryTime + " days";
+        return "kargo ID: " + cargoId + ", tarih: " + cargoDate +
+                ", teslimat: " + isDelivered + ", teslimat süresi: " + deliveryTime + " gün";
     }
 }

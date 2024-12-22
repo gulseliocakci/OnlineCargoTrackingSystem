@@ -1,0 +1,40 @@
+Index: src/main/java/org/example/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\nimport java.util.Date;\r\nimport java.util.Scanner;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n        new Interface();\r\n        /*/ CustomerManager oluşturuluyor\r\n        CustomerManager manager = new CustomerManager();\r\n\r\n        // Müşteriler ekleniyor\r\n        manager.addCustomer(1, \"John\", \"Doe\");\r\n        manager.addCustomer(2, \"Jane\", \"Smith\");\r\n\r\n        // Kargolar ekleniyor\r\n        manager.addCargoToCustomer(1, 101, new Date(2024 - 1900, 11, 15), false, 3);  // Kargo 3 gün sürecek\r\n        manager.addCargoToCustomer(1, 102, new Date(2024 - 1900, 11, 16), false, 1);  // Kargo 1 gün sürecek\r\n        manager.addCargoToCustomer(2, 103, new Date(2024 - 1900, 11, 14), true, 2);   // Kargo 2 gün sürecek\r\n        manager.addCargoToCustomer(2, 104, new Date(2024 - 1900, 11, 17), false, 4);  // Kargo 4 gün sürecek\r\n\r\n        // Kargo geçmişi sorgulama\r\n        System.out.println(\"Listing cargo history for Customer ID 1:\");\r\n        manager.listCargoHistoryForCustomer(1);\r\n\r\n        System.out.println(\"\\nListing cargo history for Customer ID 2:\");\r\n        manager.listCargoHistoryForCustomer(2);\r\n\r\n        // PriorityQueue'daki tüm kargoları listeleme\r\n        System.out.println(\"\\nPriority Queue (Sorted by Delivery Time):\");\r\n        manager.listPriorityQueue();\r\n\r\n        // Kargo işleme\r\n        System.out.println(\"\\nProcessing the next cargo from priority queue:\");\r\n        manager.processNextCargo();\r\n\r\n        // Kargo işleme tekrar yapılıyor\r\n        System.out.println(\"\\nProcessing the next cargo from priority queue:\");\r\n        manager.processNextCargo();\r\n\r\n        CargoRoutingTree routingTree = new CargoRoutingTree();\r\n        Scanner scanner = new Scanner(System.in);\r\n\r\n        routingTree.showCitiesAndDistricts();\r\n\r\n        while (true) {\r\n            System.out.println(\"\\nYeni bir kargo adresi eklemek için şehir ve ilçe bilgisi girin.\");\r\n            System.out.print(\"Şehir (çıkmak için 'exit'): \");\r\n            String city = scanner.nextLine();\r\n            if (city.equalsIgnoreCase(\"exit\")) break;\r\n\r\n            System.out.print(\"İlçe: \");\r\n            String district = scanner.nextLine();\r\n\r\n            // Ağaca adres ekleme\r\n            try {\r\n                routingTree.addCity(city);\r\n                routingTree.addDistrict(city, district);\r\n\r\n                // Teslim süresini hesaplama\r\n                int deliveryTime = routingTree.calculateDeliveryTime(city, district);\r\n                System.out.println(\"Teslim süresi: \" + deliveryTime + \" gün.\");\r\n            } catch (IllegalArgumentException e) {\r\n                System.out.println(\"Hata: \" + e.getMessage());\r\n            }\r\n\r\n            // Ağacı yazdırma\r\n            System.out.println(\"\\nGüncel Kargo Ağı:\");\r\n            routingTree.displayTree();\r\n        }\r\n\r\n        System.out.println(\"Kargo işlemi tamamlandı.\");*/\r\n\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Main.java b/src/main/java/org/example/Main.java
+--- a/src/main/java/org/example/Main.java	(revision f44a245daf789999c7747190ac8d58bc7827a6f9)
++++ b/src/main/java/org/example/Main.java	(date 1734797833547)
+@@ -5,9 +5,9 @@
+ public class Main {
+     public static void main(String[] args) {
+         new Interface();
+-        /*/ CustomerManager oluşturuluyor
++        // CustomerManager oluşturuluyor
+         CustomerManager manager = new CustomerManager();
+-
++/*
+         // Müşteriler ekleniyor
+         manager.addCustomer(1, "John", "Doe");
+         manager.addCustomer(2, "Jane", "Smith");
+@@ -35,7 +35,7 @@
+ 
+         // Kargo işleme tekrar yapılıyor
+         System.out.println("\nProcessing the next cargo from priority queue:");
+-        manager.processNextCargo();
++        manager.processNextCargo();*/
+ 
+         CargoRoutingTree routingTree = new CargoRoutingTree();
+         Scanner scanner = new Scanner(System.in);
+@@ -68,7 +68,7 @@
+             routingTree.displayTree();
+         }
+ 
+-        System.out.println("Kargo işlemi tamamlandı.");*/
++        System.out.println("Kargo işlemi tamamlandı.");
+ 
+ 
+     }
