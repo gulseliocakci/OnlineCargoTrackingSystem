@@ -133,7 +133,7 @@ public class CargoRoutingTree {
                 sb.append("  İlçe: ").append(district).append("\n");
             }
         }
-        sb.append("\nLütfen şehir ve ilçe ismini doğru yazdığınızdan emin olunuz.");
+        sb.append("\nLütfen şehir ve ilçe ismini doğru yazdığınızdan emin olunuz. Büyük harfle başlamasına dikkat ediniz.");
         return sb.toString();  // Return the formatted string
     }
 }
