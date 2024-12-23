@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Date;
+import java.util.Comparator;
+
 
 public class CustomerManager {
     private List<Customer> customers; // Tüm müşterilerin listesi
@@ -105,15 +107,32 @@ public class CustomerManager {
             }
         }
     }
-    public Cargo findCargoById(int cargoId) {
-        for (Customer customer : customers) {
-            for (Cargo cargo : customer.getCargos()) {
-                if (cargo.getCargoId() == cargoId) {
-                    return cargo;
+    public org.example.Cargo findCargoById(int cargoId) {
+        for (org.example.Customer customer : customers) {
+            List<org.example.Cargo> cargos = customer.getCargos();
+
+            // Kargo listesini cargoId'ye göre sıralıyoruz
+            cargos.sort(Comparator.comparingInt(org.example.Cargo::getCargoId));
+
+            // Binary search algoritmasını uyguluyoruz
+            int left = 0;
+            int right = cargos.size() - 1;
+
+            while (left <= right) {
+                int mid = left + (right - left) / 2; // Orta noktayı hesapla
+                org.example.Cargo midCargo = cargos.get(mid);
+
+                if (midCargo.getCargoId() == cargoId) {
+                    return midCargo; // Aranan kargo bulundu
+                } else if (midCargo.getCargoId() < cargoId) {
+                    left = mid + 1; // Sağ yarıda ara
+                } else {
+                    right = mid - 1; // Sol yarıda ara
                 }
             }
         }
-        return null; // Eğer kargo bulunmazsa null döner
+
+        return null; // Kargo bulunamazsa
     }
 
 
