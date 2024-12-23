@@ -216,8 +216,17 @@ public class Interface {
                     }
                 }
 
+                // JTextArea oluşturuyoruz
+                JTextArea textArea = new JTextArea(allCargoDetails.toString());
+                textArea.setEditable(false);  // Kullanıcı metni düzenleyemesin
+                textArea.setLineWrap(true);  // Satır kaydırma
+
+                // JTextArea'yı JScrollPane içine ekliyoruz
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(400, 300));  // İstediğiniz boyutu ayarlayabilirsiniz
+
                 // Kargo bilgilerini bir dialog penceresinde gösteriyoruz
-                JOptionPane.showMessageDialog(frame, allCargoDetails.toString(), "Tüm Kargolar", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, scrollPane, "Tüm Kargolar", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
