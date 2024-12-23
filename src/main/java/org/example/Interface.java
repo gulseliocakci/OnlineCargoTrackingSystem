@@ -225,19 +225,51 @@ public class Interface {
         button4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                StringBuilder last5CargoDetails = new StringBuilder();
+                // Kullanıcıdan Müşteri ID'sini alıyoruz
+                String customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
 
-                // Yığındaki son 5 kargoyu al
-                for (Cargo cargo : cargoStack) {
-                    last5CargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
-                            .append("Teslimat Durumu: ").append(cargo.getDeliveryStatus()).append("\n")  // String olarak "Teslim Edildi" veya "Teslim Edilmedi"
-                            .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
+                // Müşteri ID'sinin boş olmasını engelle ve sadece sayılar kabul et
+                while (customerID == null || customerID.trim().isEmpty() || !customerID.matches("[0-9]+")) {
+                    if (customerID == null) return; // Eğer kullanıcı 'İptal' butonuna basarsa çık
+                    JOptionPane.showMessageDialog(frame, "Lütfen geçerli bir Müşteri ID girin (sadece sayılar).");
+                    customerID = JOptionPane.showInputDialog(frame, "Müşteri ID:");
+                }
+
+                // Müşteriyi bul
+                org.example.Customer customer = customerManager.findCustomerById(customerID);
+                if (customer == null) {
+                    JOptionPane.showMessageDialog(frame, "Bu Müşteri ID ile kayıtlı bir müşteri bulunmamaktadır.");
+                    return;
+                }
+
+                // Müşterinin tüm kargolarını alıyoruz
+                List<org.example.Cargo> customerCargos = customer.getCargos();
+
+                // Eğer müşteri geçmişi boşsa uygun bir mesaj gösteriyoruz
+                if (customerCargos.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Bu müşterinin gönderim geçmişi bulunmamaktadır.");
+                    return;
+                }
+
+                // Son 5 kargoyu göstermek için bir Stack kullanıyoruz
+                Stack<org.example.Cargo> last5Cargos = new Stack<>();
+                for (int i = customerCargos.size() - 1; i >= 0 && last5Cargos.size() < 5; i--) {
+                    last5Cargos.push(customerCargos.get(i));
+                }
+
+                // Kargo bilgilerini bir StringBuilder ile hazırlıyoruz
+                StringBuilder cargoDetails = new StringBuilder();
+                while (!last5Cargos.isEmpty()) {
+                    org.example.Cargo cargo = last5Cargos.pop();
+                    cargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
+                            .append("Teslimat Durumu: ").append(cargo.getDeliveryStatus()).append("\n")
+                            .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün\n")
                             .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n")
                             .append("--------------------------------------\n");
                 }
 
-                // Kargo bilgilerini bir dialog penceresinde gösteriyoruz
-                JOptionPane.showMessageDialog(frame, last5CargoDetails.toString(), "Son 5 Kargo", JOptionPane.INFORMATION_MESSAGE);
+                // Bilgileri bir JOptionPane'de gösteriyoruz
+                JOptionPane.showMessageDialog(frame, cargoDetails.toString(), "Son 5 Kargo", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
