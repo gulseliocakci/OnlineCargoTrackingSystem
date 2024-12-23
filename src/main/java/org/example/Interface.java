@@ -162,7 +162,7 @@ public class Interface {
                     }
                 }
                 Date cargoDate = new Date(); // Kargo tarihi şu anki tarih olacak
-                boolean isDelivered = false; // Kargo henüz teslim edilmedi
+                String deliveryStatus = "İşleme Alındı";
 
                 // Teslimat süresi hesaplanacak
                 int deliveryTime = cargoRoutingTree.calculateDeliveryTime(cityName, districtName);
@@ -172,12 +172,12 @@ public class Interface {
                 }
 
                 // Kargo ekleme işlemi için CustomerManager sınıfındaki addCargoToCustomer metodunu kullanıyoruz
-                customerManager.addCargoToCustomer(customerID, cargoId, cargoDate, isDelivered, deliveryTime, frame);
+                customerManager.addCargoToCustomer(customerID, cargoId, cargoDate, deliveryStatus, deliveryTime, frame);
 
 
 
                 // Kargo objesini oluştur ve yığına ekle
-                Cargo cargo = new Cargo(cargoId, cargoDate, false, deliveryTime);
+                Cargo cargo = new Cargo(cargoId, cargoDate, "İşleme Alındı", deliveryTime);
                 cargoStack.push(cargo);
 
                 // Yığına 5'ten fazla kargo eklenirse en eski kargo çıkarılacak
@@ -209,7 +209,7 @@ public class Interface {
                     // Kargo bilgilerini listeye ekliyoruz
                     for (Cargo cargo : allCargos) {
                         allCargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
-                                .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
+                                .append("Teslimat Durumu: ").append(cargo.getDeliveryStatus()).append("\n")  // String olarak "Teslim Edildi" veya "Teslim Edilmedi"
                                 .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
                                 .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n")
                                 .append("--------------------------------------\n");
@@ -230,7 +230,7 @@ public class Interface {
                 // Yığındaki son 5 kargoyu al
                 for (Cargo cargo : cargoStack) {
                     last5CargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
-                            .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
+                            .append("Teslimat Durumu: ").append(cargo.getDeliveryStatus()).append("\n")  // String olarak "Teslim Edildi" veya "Teslim Edilmedi"
                             .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
                             .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n")
                             .append("--------------------------------------\n");
@@ -267,7 +267,7 @@ public class Interface {
                 // Kargo bilgilerini göstermek için bir StringBuilder kullanabiliriz
                 StringBuilder cargoDetails = new StringBuilder();
                 cargoDetails.append("Kargo ID: ").append(cargo.getCargoId()).append("\n")
-                        .append("Teslimat Durumu: ").append(cargo.isDelivered() ? "Teslim Edildi" : "Teslim Edilmedi").append("\n")
+                        .append("Teslimat Durumu: ").append(cargo.getDeliveryStatus()).append("\n")  // String olarak "Teslim Edildi" veya "Teslim Edilmedi"
                         .append("Teslimat Süresi: ").append(cargo.getDeliveryTime()).append(" gün").append("\n")
                         .append("Kargo Tarihi: ").append(cargo.getCargoDate()).append("\n");
 
@@ -279,9 +279,44 @@ public class Interface {
         button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Kullanıcıdan Kargo ID'sini alıyoruz
+                String cargoIdStr = JOptionPane.showInputDialog(frame, "Kargo ID'sini girin:");
 
+                if (cargoIdStr != null && !cargoIdStr.isEmpty()) {
+                    try {
+                        // Kargo ID'sini int'e dönüştürüyoruz
+                        int cargoId = Integer.parseInt(cargoIdStr);
+
+                        // Kargo ID'sini kullanarak kargo nesnesini buluyoruz
+                        Cargo cargo = customerManager.findCargoById(cargoId);
+
+                        if (cargo != null) {
+                            // Durum seçim penceresi oluşturuyoruz
+                            String[] options = {"İşleme Alındı", "Teslimatta", "Teslim Edildi"};
+                            int choice = JOptionPane.showOptionDialog(null, "Kargo Durumunu Seçin", "Durum Seçimi",
+                                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+                            // Seçilen duruma göre kargo durumunu güncelliyoruz
+                            if (choice == 0) {
+                                cargo.setDeliveryStatus("İşleme Alındı");
+                                JOptionPane.showMessageDialog(null, "Kargo durumu 'İşleme Alındı' olarak güncellendi.");
+                            } else if (choice == 1) {
+                                cargo.setDeliveryStatus("Teslimatta");
+                                JOptionPane.showMessageDialog(null, "Kargo durumu 'Teslimatta' olarak güncellendi.");
+                            } else if (choice == 2) {
+                                cargo.setDeliveryStatus("Teslim Edildi");
+                                JOptionPane.showMessageDialog(null, "Kargo durumu 'Teslim Edildi' olarak güncellendi.");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Kargo ID'si bulunamadı.");
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Geçersiz Kargo ID'si.");
+                    }
+                }
             }
         });
+
 
         button7.addActionListener(new ActionListener() {
             @Override

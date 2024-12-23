@@ -4,14 +4,14 @@ import java.util.Date;
 public class Cargo implements Comparable<Cargo> {
     private int cargoId; // Kargo ID
     private Date cargoDate; // Kargo tarihi
-    private boolean isDelivered; // Teslim durumu (true: teslim edildi, false: teslim edilmedi)
+    private String deliveryStatus; // Teslim durumu (true: teslim edildi, false: teslim edilmedi)
     private int deliveryTime; // Teslim süresi (gün cinsinden)
 
     // Constructor
-    public Cargo(int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime) {
+    public Cargo(int cargoId, Date cargoDate, String deliveryStatus, int deliveryTime) {
         this.cargoId = cargoId;
         this.cargoDate = cargoDate;
-        this.isDelivered = isDelivered;
+        this.deliveryStatus = deliveryStatus;
         this.deliveryTime = deliveryTime;
     }
 
@@ -32,12 +32,12 @@ public class Cargo implements Comparable<Cargo> {
         this.cargoDate = cargoDate;
     }
 
-    public boolean isDelivered() {
-        return isDelivered;
+    public String getDeliveryStatus() {
+        return deliveryStatus;
     }
 
-    public void setDelivered(boolean delivered) {
-        isDelivered = delivered;
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
     public int getDeliveryTime() {
@@ -56,7 +56,6 @@ public class Cargo implements Comparable<Cargo> {
 
     @Override
     public String toString() {
-        return "kargo ID: " + cargoId + ", tarih: " + cargoDate +
-                ", teslimat: " + isDelivered + ", teslimat süresi: " + deliveryTime + " gün";
+        return "Cargo ID: " + cargoId + ", Date: " + cargoDate + ", Status: " + deliveryStatus + ", Delivery Time: " + deliveryTime;
     }
 }

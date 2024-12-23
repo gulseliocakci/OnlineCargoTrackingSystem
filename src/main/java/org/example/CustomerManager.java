@@ -55,7 +55,7 @@ public class CustomerManager {
     }
 
     // Kargo ekleme işlemi
-    public void addCargoToCustomer(String customerId, int cargoId, Date cargoDate, boolean isDelivered, int deliveryTime, JFrame frame) {
+    public void addCargoToCustomer(String customerId, int cargoId, Date cargoDate, String deliveryStatus, int deliveryTime, JFrame frame) {
         // Kargo ID kontrolü (tüm sistemde benzersiz olmalı)
         if (hasCargoWithId(cargoId)) {
             JOptionPane.showMessageDialog(frame, "Bu Kargo ID'si zaten mevcut. Lütfen farklı bir ID girin.",
@@ -68,7 +68,7 @@ public class CustomerManager {
 
         if (customer != null) {
             // Kargo nesnesini oluşturma
-            Cargo cargo = new Cargo(cargoId, cargoDate, isDelivered, deliveryTime);
+            Cargo cargo = new Cargo(cargoId, cargoDate, "İşleme Alındı", deliveryTime);
 
             // Kargo nesnesini müşteriye ekleme
             customer.addCargo(cargo); // Müşteriye kargo ekleniyor
